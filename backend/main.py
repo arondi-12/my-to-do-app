@@ -1,5 +1,4 @@
 import os
-
 from contextlib import asynccontextmanager
 from datetime import datetime
 
@@ -9,23 +8,6 @@ from sqlmodel import Session, select
 
 from database import create_db_and_tables, get_session
 from models import Todo, TodoCreate, TodoUpdate, TodoReorder, Note, NoteUpdate
-
-app = FastAPI()
-
-# Allow your Vercel domain and local development
-origins = [
-    "https://my-to-do-app-zeta-three.vercel.app",
-    "http://localhost:5173",
-    "http://localhost:3000",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows GET, POST, PATCH, DELETE, OPTIONS, etc.
-    allow_headers=["*"],
-)
 
 
 @asynccontextmanager
@@ -37,23 +19,30 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Todo API", lifespan=lifespan)
 
-# Vite's default dev server port. Add more origins here if you change ports
-# or deploy the frontend somewhere else.
+# ALLOWED_ORIGINS is a comma-separated env var, e.g.
+# "https://your-app.vercel.app,http://localhost:5173"
+# Set it in Render's dashboard — no code change needed to update it.
 default_origins = "http://localhost:5173"
-allowed_origins = os.environ.get("ALLOWED_ORIGINS", default_origins).split(",")
+allowed_origins = [
+    origin.strip()
+    for origin in os.environ.get("ALLOWED_ORIGINS", default_origins).split(",")
+    if origin.strip()
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def health_check():
     # Render pings this to confirm the service is alive.
     return {"status": "ok"}
+
 
 @app.get("/todos", response_model=list[Todo])
 def list_todos(session: Session = Depends(get_session)):
@@ -79,7 +68,6 @@ def update_todo(todo_id: int, patch: TodoUpdate, session: Session = Depends(get_
     if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
 
-    # exclude_unset means "only touch fields the client actually sent"
     updates = patch.model_dump(exclude_unset=True)
     for key, value in updates.items():
         setattr(todo, key, value)
@@ -107,8 +95,6 @@ def reorder_todo(todo_id: int, body: TodoReorder, session: Session = Depends(get
     if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
 
-    # Pull it out of the list, reinsert at the target index, then
-    # re-number everyone 0..n-1 so positions stay dense and consistent.
     todos.remove(todo)
     new_index = max(0, min(body.new_position, len(todos)))
     todos.insert(new_index, todo)
