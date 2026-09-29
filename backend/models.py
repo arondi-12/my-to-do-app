@@ -1,5 +1,10 @@
-from datetime import datetime, date
+from datetime import datetime, timezone, date
 from sqlmodel import SQLModel, Field
+
+
+# Helper function to generate current UTC time in a timezone-aware way
+def get_utc_now() -> datetime:
+    return datetime.now(timezone.utc)
 
 
 # The actual database table
@@ -9,7 +14,7 @@ class Todo(SQLModel, table=True):
     completed: bool = False
     position: int
     due_date: date | None = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=get_utc_now)
 
 
 # Request body for POST /todos — title is required, due_date is optional
@@ -37,7 +42,7 @@ class TodoReorder(SQLModel):
 class Note(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     content: str = ""
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=get_utc_now)
 
 
 class NoteUpdate(SQLModel):
