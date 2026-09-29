@@ -10,6 +10,23 @@ from sqlmodel import Session, select
 from database import create_db_and_tables, get_session
 from models import Todo, TodoCreate, TodoUpdate, TodoReorder, Note, NoteUpdate
 
+app = FastAPI()
+
+# Allow your Vercel domain and local development
+origins = [
+    "https://my-to-do-app-zeta-three.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows GET, POST, PATCH, DELETE, OPTIONS, etc.
+    allow_headers=["*"],
+)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
