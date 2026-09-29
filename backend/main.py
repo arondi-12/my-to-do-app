@@ -1,3 +1,5 @@
+import os
+
 from contextlib import asynccontextmanager
 from datetime import datetime
 
@@ -20,6 +22,9 @@ app = FastAPI(title="Todo API", lifespan=lifespan)
 
 # Vite's default dev server port. Add more origins here if you change ports
 # or deploy the frontend somewhere else.
+default_origins = "http://localhost:5173"
+allowed_origins = os.environ.get("ALLOWED_ORIGINS", default_origins).split(",")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -28,6 +33,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def health_check():
+    # Render pings this to confirm the service is alive.
+    return {"status": "ok"}
 
 @app.get("/todos", response_model=list[Todo])
 def list_todos(session: Session = Depends(get_session)):

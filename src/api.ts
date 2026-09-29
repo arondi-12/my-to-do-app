@@ -2,7 +2,7 @@ import type { Todo, NewTodo, TodoUpdate, Note } from "./types";
 
 // Point this at your FastAPI server once it's running.
 // If you use Vite, prefer an env var: import.meta.env.VITE_API_URL
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
