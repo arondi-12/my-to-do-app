@@ -1,0 +1,241 @@
+:root {
+  --paper: #f7f5f0;
+  --ink: #23241f;
+  --ink-soft: #6b6a63;
+  --line: #ddd9cf;
+  --accent: #4a6b5a; /* muted pine — used only for the checked state */
+  --danger: #a3432f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Iowan Old Style", "Georgia", serif;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+
+.app__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.app__header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.app__count {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.app__status {
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.app__error {
+  background: #f6e9e5;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  margin: 1rem 0 0;
+}
+
+.add-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.add-form__input {
+  flex: 1;
+  font: inherit;
+  font-size: 1rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: white;
+  color: var(--ink);
+}
+
+.add-form__input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.add-form__button {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+}
+
+.add-form__button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.add-form__date {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: white;
+  color: var(--ink);
+}
+
+.todo-list {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.todo-item__handle {
+  border: none;
+  background: none;
+  cursor: grab;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  padding: 0 0.2rem;
+  touch-action: none;
+}
+
+.todo-item__handle:active {
+  cursor: grabbing;
+}
+
+.todo-item__label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+.todo-item__label input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--accent);
+}
+
+.todo-item__title {
+  font-size: 1.05rem;
+}
+
+.todo-item__title--done {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  text-decoration-color: var(--accent);
+}
+
+.todo-item__due {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.1rem 0.4rem;
+  white-space: nowrap;
+}
+
+.todo-item__due--overdue {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.todo-item__delete {
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.3rem;
+}
+
+.todo-item__delete:hover {
+  color: var(--danger);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .todo-item {
+    transition: background-color 0.15s ease;
+  }
+}
+
+.notes {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--ink);
+}
+
+.notes__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.notes__header h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.notes__status {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.notes__textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: white;
+  color: var(--ink);
+  resize: vertical;
+}
+
+.notes__textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
